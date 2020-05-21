@@ -1,4 +1,18 @@
 ---
-- include: 01_limits_conf.yml
-- include: 02_sysctl_conf.yml
-- include: 03_open_firewalld.yml
+- name:             Set OS family dependent variables
+  include_vars:     '{{ ansible_facts.os_family }}.yml'
+  tags:             always
+
+- name:             Set OS dependent variables
+  include_vars:     '{{ item }}'
+  with_first_found:
+    - files:
+      - '{{ ansible_facts.distribution }}-{{ ansible_facts.distribution_major_version }}.yml'
+      - '{{ ansible_facts.distribution }}.yml'
+      - '{{ ansible_facts.os_family }}-{{ ansible_facts.distribution_major_version }}.yml'
+      skip:         true
+  tags:             always
+
+- include:          01_limits_conf.yml
+- include:          02_sysctl_conf.yml
+- include:          03_open_firewalld.yml
