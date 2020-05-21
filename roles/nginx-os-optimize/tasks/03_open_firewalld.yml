@@ -1,10 +1,10 @@
-- name: "Enable web ports"
+- name:        "Enable web ports"
   firewalld:
-    service: "{{ item }}"
+    service:   "{{ item }}"
     permanent: true
     immediate: true
-    state: enabled
+    state:     enabled
   loop:
     - http
     - https
-  when: ansible_fact.os_family == "Redhat"
+  when:        ansible_fact.os_family == "RedHat"
