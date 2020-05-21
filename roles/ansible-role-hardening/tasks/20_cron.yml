@@ -1,0 +1,79 @@
+---
+- name: remove cron.deny and at.deny
+  become: 'yes'
+  become_method: sudo
+  file:
+    path: "{{ item }}"
+    state: absent
+  ignore_errors: true
+  with_items:
+    - /etc/cron.deny
+    - /etc/at.deny
+    - /etc/cron.allow
+    - /etc/at.allow
+  tags:
+    - at
+    - cron
+    - security
+
+- name: allow root cron and at
+  become: 'yes'
+  become_method: sudo
+  lineinfile:
+    line: "root"
+    dest: "{{ item }}"
+    mode: 0600
+    state: present
+    create: 'yes'
+  with_items:
+    - /etc/cron.allow
+    - /etc/at.allow
+  tags:
+    - at
+    - cron
+    - security
+
+# CCE-80345-2
+- name: mask atd
+  become: 'yes'
+  become_method: sudo
+  systemd:
+    name: atd
+    masked: 'yes'
+    enabled: 'no'
+    state: stopped
+  ignore_errors: true
+  tags:
+    - at
+    - systemd
+    - security
+
+- name: cron permissions
+  file:
+    path: "{{ item }}"
+    mode: 0700
+    owner: root
+    group: root
+  with_items:
+    - /etc/cron.d
+    - /etc/cron.daily
+    - /etc/cron.hourly
+    - /etc/cron.weekly
+    - /etc/cron.monthly
+  ignore_errors: true
+  tags:
+    - cron
+    - security
+
+- name: crontab permissions
+  file:
+    path: /etc/crontab
+    mode: 0600
+    owner: root
+    group: root
+  ignore_errors: true
+  tags:
+    - cron
+    - crontab
+    - security
+...
