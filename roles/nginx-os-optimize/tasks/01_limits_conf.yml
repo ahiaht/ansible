@@ -1,11 +1,13 @@
 # Add or modify nofile soft limit for the user nginx
-- pam_limits:
+- name: nginx user soft nofile limit
+  pam_limits:
     domain:     nginx
     limit_type: soft
     limit_item: nofile
     value:      32000
 # Add or modify nofile soft limit for the user nginx
-- pam_limits:
+- name: nginx user hard nofile limit
+  pam_limits:
     domain:     nginx
     limit_type: hard
     limit_item: nofile

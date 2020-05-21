@@ -31,7 +31,7 @@
     value: '4096 87380 16777216'
     state: present
 - sysctl:
-    name:  net.ipv4.tcp_2mem
+    name:  net.ipv4.tcp_wmem
     value: '4096 87380 16777216'
     state: present
 

@@ -3,4 +3,4 @@
   connection: local
   remote_user: root
   roles:
-    - ansible-role-hardening
+    - nginx-os-optimize
