@@ -21,7 +21,7 @@
       - config_name:             k8s-ingress
         backend_name:            k8s-ingress
         backends:
-            - 10.19.168.200:443
+            - 10.19.168.200
         domains:
           - "*.apps-nonprod.platform.hcnet.vn"
         balancer_config:         ip_hash;
