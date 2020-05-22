@@ -1,0 +1,19 @@
+---
+# Defines variables for Debian/Ubuntu
+
+nginx_user: www-data
+nginx_service: nginx
+nginx_config_dir: /etc/nginx
+nginx_default_files:
+  - /etc/nginx/sites-enabled/default
+  - /var/www/html
+  - /var/www/index.html
+nginx_pid: /run/nginx.pid
+nginx_packages:
+  - nginx
+apache_packages:
+  - apache2
+  - apache2.2-common
+  - apache2.2-bin
+  - apache2-utils
+  - apache2-mpm-worker
