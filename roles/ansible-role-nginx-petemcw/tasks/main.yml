@@ -1,0 +1,84 @@
+---
+# Defines tasks to install and configure Nginx
+
+- name: Gather OS specific varibles
+  include_vars: "{{ item }}"
+  with_first_found:
+    - "{{ ansible_distribution }}-{{ ansible_distribution_major_version }}.yml"
+    - "{{ ansible_distribution }}.yml"
+    - "{{ ansible_os_family }}.yml"
+  tags:
+    - nginx
+
+- include: "Ubuntu/install.yml"
+  when: ansible_distribution == "Ubuntu"
+  tags:
+    - nginx
+
+- include: "{{ ansible_os_family }}/install.yml"
+  static: no
+  tags:
+    - nginx
+
+- name: Remove default files
+  file: >
+    path="{{ item }}"
+    state=absent
+  with_items: "{{ nginx_default_files }}"
+  when: nginx_remove_default_files
+  notify:
+    - restart nginx
+  tags:
+    - nginx
+
+- name: Ensure proper directories exist
+  file: >
+    path="{{ item }}"
+    state=directory
+    mode=0755 owner=root group=root
+  with_items:
+    - '{{ nginx_config_dir }}/ssl'
+    - '{{ nginx_config_dir }}/conf.d'
+    - '{{ nginx_config_dir }}/sites-enabled'
+    - '{{ nginx_config_dir }}/sites-available'
+  tags:
+    - nginx
+
+- name: Generate Diffie-Hellman bits used for Perfect Forward Secrecy
+  shell: "umask 077 && openssl dhparam -out {{ nginx_config_dir }}/ssl/{{ nginx_ssl_dhparam | default('dh2048.pem') }} 2048"
+  args:
+    creates: "{{ nginx_config_dir }}/ssl/{{ nginx_ssl_dhparam | default('dh2048.pem') }}"
+
+- name: Write configuration templates
+  template: >
+    src=nginx.conf.j2
+    dest="{{ nginx_config_dir }}/nginx.conf"
+    mode=0644 owner=root group=root
+    backup=yes
+  notify:
+    - restart nginx
+  tags:
+    - nginx
+
+- include: vhosts.yml
+
+- name: Create a basic auth users
+  htpasswd: >
+    path="{{ nginx_config_dir }}/.htpasswd"
+    name="{{ item['user']['name'] }}"
+    password={{ item['user']['pass'] }}
+    create=yes
+    state=present
+    mode=0640 owner=root group={{ nginx_user }}
+  with_items: "{{ nginx_htpasswd_users }}"
+  when: nginx_htpasswd_users|length > 0
+  tags:
+    - nginx
+
+- name: Start Nginx on server boot
+  service: >
+    name="{{ nginx_service }}"
+    state=started
+    enabled=yes
+  tags:
+    - nginx
