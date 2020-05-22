@@ -25,8 +25,8 @@ server {
    error_log /var/log/nginx/{{ item.key }}_error.log error;
 
    ssl on;
-   ssl_certificate /etc/ssl/certs/hcvn.pem;
-   ssl_certificate_key /etc/ssl/private/hcvn.key;
+   ssl_certificate/etc/pki/tls/certs/hcvn.pem;
+   ssl_certificate_key /etc/pki/tls/private/hcvn.key;
    ssl_session_timeout 5m;
    ssl_protocols TLSv1 TLSv1.1 TLSv1.2;
    ssl_ciphers 'EECDH+AESGCM:EDH+AESGCM:AES256+EECDH:AES256+EDH';
@@ -71,8 +71,8 @@ server {
    error_log /var/log/nginx/{{ item.key }}_error.log error;
 
    ssl on;
-   ssl_certificate /etc/ssl/certs/hcvn.pem;
-   ssl_certificate_key /etc/ssl/private/hcvn.key;
+   ssl_certificate /etc/pki/tls/certs/hcvn.pem;
+   ssl_certificate_key /etc/pki/tls/private/hcvn.key;
    ssl_session_timeout 5m;
    ssl_protocols TLSv1 TLSv1.1 TLSv1.2;
    ssl_ciphers 'EECDH+AESGCM:EDH+AESGCM:AES256+EECDH:AES256+EDH';

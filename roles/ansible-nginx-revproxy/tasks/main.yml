@@ -45,7 +45,7 @@
 - name:       Add Https Site key
   template:
     src:      hcvn.key
-    dest:     /etc/ssl/private/hcvn.key
+    dest:     /etc/pki/tls/private/hcvn.key
     owner:    root
     group:    root
   with_dict:  "{{ nginx_revproxy_sites }}"
@@ -59,7 +59,7 @@
 - name:       Add Https Site cert
   template:
     src:      hcvn.pem
-    dest:     /etc/ssl/private/hcvn.pem
+    dest:     /etc/pki/tls/certs/hcvn.pem
     owner:    root
     group:    root
   with_dict:  "{{ nginx_revproxy_sites }}"
