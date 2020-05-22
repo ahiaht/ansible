@@ -48,6 +48,7 @@
     dest:     /etc/ssl/private/hcvn.key
     owner:    root
     group:    root
+  with_dict:  "{{ nginx_revproxy_sites }}"
   when:
     - siteconfig is success
     - item.value.ssl | default(False)
@@ -61,6 +62,7 @@
     dest:     /etc/ssl/private/hcvn.pem
     owner:    root
     group:    root
+  with_dict:  "{{ nginx_revproxy_sites }}"
   when:
     - siteconfig is success
     - item.value.ssl | default(False)
