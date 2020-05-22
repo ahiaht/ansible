@@ -92,9 +92,9 @@ redhat_rpm_key:
   - 567E347AD0044ADE55BA8A5F199E2F91FD431D51
   - 47DB287789B21722B6D95DDE5326810137017186
 sshd_admin_net:
-  - 192.168.0.0/24
-  - 192.168.1.0/24
-sshd_allow_groups: sudo
+  - 10.0.0.0/8
+  - 172.24.0/16
+sshd_allow_groups: sudo wheel
 sshd_max_auth_tries: 3
 sshd_max_sessions: 3
 sshd_port: 22
@@ -172,7 +172,7 @@ suid_sgid_blacklist:
   - /usr/bin/fusermount
   - /usr/bin/gawk
   - /usr/bin/gcc
-  - /usr/bin/git
+#  - /usr/bin/git
   - /usr/bin/grep
   - /usr/bin/hd
   - /usr/bin/head
