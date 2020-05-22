@@ -42,6 +42,32 @@
   tags:
     - nginxrevproxy
 
+- name:       Add Https Site key
+  template:
+    src:      hcvn.key
+    dest:     /etc/ssl/private/hcvn.key
+    owner:    root
+    group:    root
+  when:
+    - siteconfig is success
+    - item.value.ssl | default(False)
+    - not item.value.letsencrypt | default(True)
+  tags:
+    - nginxrevproxy
+
+- name:       Add Https Site cert
+  template:
+    src:      hcvn.pem
+    dest:     /etc/ssl/private/hcvn.pem
+    owner:    root
+    group:    root
+  when:
+    - siteconfig is success
+    - item.value.ssl | default(False)
+    - not item.value.letsencrypt | default(True)
+  tags:
+    - nginxrevproxy
+
 - name:       Create WebRoot sites
   file:
     dest:     /var/www/{{ item.key }}/.well-known
